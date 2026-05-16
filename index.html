@@ -66,13 +66,14 @@
                 <input type="file" id="media-input" style="display: none;" accept="image/*, video/*, audio/*">
                 <button id="attach-btn" title="Attach Media"><i class="fa-solid fa-paperclip"></i></button>
                 <textarea id="message-input" placeholder="Type a message..." rows="1" disabled></textarea>
-                <button id="send-btn" title="Send" disabled><i class="fa-solid fa-paper-plane"></i></button>
+                <button id="voice-btn" title="Record Voice" disabled><i class="fa-solid fa-microphone"></i></button>
+                <button id="send-btn" title="Send" disabled style="display: none;"><i class="fa-solid fa-paper-plane"></i></button>
             </footer>
         </main>
     </div>
 
     <!-- PeerJS Library -->
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
-    <script src="app.js"></script>
+    <script type="module" src="js/main.js"></script>
 </body>
 </html>
