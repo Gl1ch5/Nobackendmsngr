@@ -100,8 +100,8 @@ async function toggleVoiceRecording() {
             mediaRecorder.start();
             isRecording = true;
             voiceBtn.classList.add('recording');
-            voiceBtn.innerHTML = '<i class="fa-solid fa-stop"></i>';
-            voiceBtn.style.color = '#ea0038'; // recording red
+            voiceBtn.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect></svg>';
+            voiceBtn.style.color = '#ff4a4a'; // recording red
         } catch (err) {
             console.error("Error accessing microphone:", err);
             alert("Could not access microphone for voice messaging.");
@@ -112,7 +112,7 @@ async function toggleVoiceRecording() {
         }
         isRecording = false;
         voiceBtn.classList.remove('recording');
-        voiceBtn.innerHTML = '<i class="fa-solid fa-microphone"></i>';
+        voiceBtn.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="22"></line></svg>';
         voiceBtn.style.color = '';
     }
 }

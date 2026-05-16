@@ -1,5 +1,17 @@
 export function saveConnectionHistory(peerId, messages) {
-    localStorage.setItem(`chat_${peerId}`, JSON.stringify(messages));
+    try {
+        localStorage.setItem(`chat_${peerId}`, JSON.stringify(messages));
+    } catch (e) {
+        console.warn("Storage quota exceeded. History not fully saved.", e);
+        // Fallback: clear older messages or just don't save
+        if (messages.length > 10) {
+            try {
+                localStorage.setItem(`chat_${peerId}`, JSON.stringify(messages.slice(-10)));
+            } catch (err) {
+                console.error("Still exceeding quota even with sliced messages.");
+            }
+        }
+    }
 }
 
 export function loadConnectionHistory(peerId) {

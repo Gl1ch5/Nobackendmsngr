@@ -17,6 +17,8 @@ const messageInput = document.getElementById('message-input');
 const sendBtn = document.getElementById('send-btn');
 const attachBtn = document.getElementById('attach-btn');
 const mediaInput = document.getElementById('media-input');
+const appContainer = document.querySelector('.app-container');
+const mobileBackBtn = document.getElementById('mobile-back-btn');
 
 const replyPreview = document.getElementById('reply-preview');
 const replyPreviewName = document.getElementById('reply-preview-name');
@@ -26,13 +28,17 @@ const cancelReplyBtn = document.getElementById('cancel-reply-btn');
 export function initUI() {
     copyIdBtn.addEventListener('click', () => {
         navigator.clipboard.writeText(myIdInput.value).then(() => {
-            const icon = copyIdBtn.querySelector('i');
-            icon.classList.remove('fa-copy');
-            icon.classList.add('fa-check');
-            setTimeout(() => {
-                icon.classList.remove('fa-check');
-                icon.classList.add('fa-copy');
-            }, 2000);
+            const svg = copyIdBtn.querySelector('svg');
+            if (svg) {
+                // Change to a checkmark SVG temporarily
+                const originalHTML = svg.innerHTML;
+                svg.innerHTML = '<polyline points="20 6 9 17 4 12"></polyline>';
+                svg.style.stroke = 'var(--primary-color)';
+                setTimeout(() => {
+                    svg.innerHTML = originalHTML;
+                    svg.style.stroke = 'currentColor';
+                }, 2000);
+            }
         });
     });
 
@@ -67,6 +73,13 @@ export function initUI() {
     });
 
     cancelReplyBtn.addEventListener('click', clearReply);
+
+    if(mobileBackBtn) {
+        mobileBackBtn.addEventListener('click', () => {
+            appContainer.classList.remove('chat-active');
+            // disableChat(state.activeChatId, true); // Optionally clear active chat selection
+        });
+    }
 }
 
 export function updateMyIdDisplay(id) {
@@ -82,7 +95,9 @@ export function updateConnectionsList() {
         const li = document.createElement('li');
         li.className = `connection-item ${state.activeChatId === peerId ? 'active' : ''}`;
         li.innerHTML = `
-            <div class="peer-avatar"><i class="fa-solid fa-user"></i></div>
+            <div class="peer-avatar">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            </div>
             <div class="peer-info">
                 <div class="peer-name">${peerId}</div>
                 <div class="peer-status ${isConnected ? 'online' : 'offline'}">${isConnected ? 'Connected' : 'Offline'}</div>
@@ -96,6 +111,11 @@ export function updateConnectionsList() {
 export function selectChat(peerId) {
     state.activeChatId = peerId;
     currentChatTitle.textContent = peerId;
+
+    // Mobile responsive: show chat area
+    if(window.innerWidth <= 768) {
+        appContainer.classList.add('chat-active');
+    }
 
     const isConnected = state.connections[peerId] && state.connections[peerId].connection;
 
@@ -134,7 +154,7 @@ export function disableChat(peerId, keepMessages = false) {
         connectionStatus.classList.remove('connected');
         chatMessages.innerHTML = `
             <div class="welcome-message">
-                <i class="fa-brands fa-rocketchat"></i>
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 20px;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
                 <p>Welcome to Flat P2P Messenger!</p>
                 <p class="subtitle">Share your ID to start a secure peer-to-peer conversation.</p>
             </div>
@@ -216,7 +236,7 @@ export function renderMessage(msg, sender) {
     actionsDiv.className = 'message-actions';
     const replyBtn = document.createElement('button');
     replyBtn.className = 'reply-action-btn';
-    replyBtn.innerHTML = '<i class="fa-solid fa-reply"></i>';
+    replyBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 17 4 12 9 7"></polyline><path d="M20 18v-2a4 4 0 0 0-4-4H4"></path></svg>';
     replyBtn.onclick = () => initiateReply(msg);
     actionsDiv.appendChild(replyBtn);
     wrapper.appendChild(actionsDiv);
