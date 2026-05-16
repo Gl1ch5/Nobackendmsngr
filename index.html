@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>P2P Flat Messenger</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>My ID</h2>
+                <div class="my-id-container">
+                    <input type="text" id="my-peer-id" readonly placeholder="Generating...">
+                    <button id="copy-id-btn" title="Copy ID"><i class="fa-solid fa-copy"></i></button>
+                </div>
+            </div>
+
+            <div class="connect-section">
+                <h3>Connect to Peer</h3>
+                <div class="connect-input-group">
+                    <input type="text" id="peer-id-input" placeholder="Enter Peer ID">
+                    <button id="connect-btn" title="Connect"><i class="fa-solid fa-link"></i></button>
+                </div>
+            </div>
+
+            <div class="connections-list">
+                <h3>Active Connections</h3>
+                <ul id="connections-ul">
+                    <!-- Connections will appear here -->
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Main Chat Area -->
+        <main class="chat-area">
+            <header class="chat-header">
+                <div class="chat-header-info">
+                    <h2 id="current-chat-title">Select a connection to start chatting</h2>
+                    <span id="connection-status" class="status-indicator"></span>
+                </div>
+            </header>
+
+            <div class="chat-messages" id="chat-messages">
+                <!-- Messages will appear here -->
+                <div class="welcome-message">
+                    <i class="fa-brands fa-rocketchat"></i>
+                    <p>Welcome to Flat P2P Messenger!</p>
+                    <p class="subtitle">Share your ID to start a secure peer-to-peer conversation.</p>
+                </div>
+            </div>
+
+            <!-- Reply Preview Bar -->
+            <div class="reply-preview hidden" id="reply-preview">
+                <div class="reply-preview-content">
+                    <span class="reply-preview-name" id="reply-preview-name">Name</span>
+                    <span class="reply-preview-text" id="reply-preview-text">Message preview...</span>
+                </div>
+                <button id="cancel-reply-btn"><i class="fa-solid fa-times"></i></button>
+            </div>
+
+            <footer class="chat-input-area">
+                <input type="file" id="media-input" style="display: none;" accept="image/*, video/*, audio/*">
+                <button id="attach-btn" title="Attach Media"><i class="fa-solid fa-paperclip"></i></button>
+                <textarea id="message-input" placeholder="Type a message..." rows="1" disabled></textarea>
+                <button id="send-btn" title="Send" disabled><i class="fa-solid fa-paper-plane"></i></button>
+            </footer>
+        </main>
+    </div>
+
+    <!-- PeerJS Library -->
+    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
