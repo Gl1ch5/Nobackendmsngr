@@ -2,10 +2,7 @@ import { state } from './state.js';
 import * as storage from './storage.js';
 import * as ui from './ui.js';
 
-export function initPeer() {
-    const savedId = storage.getMyId();
-    state.peer = savedId ? new Peer(savedId) : new Peer();
-
+function setupPeerListeners() {
     state.peer.on('open', (id) => {
         storage.setMyId(id);
         ui.updateMyIdDisplay(id);
@@ -30,8 +27,28 @@ export function initPeer() {
 
     state.peer.on('error', (err) => {
         console.error(err);
-        alert('PeerJS Error: ' + err.message);
+        if (err.type === 'unavailable-id') {
+            console.log('Saved ID is taken, generating a new one...');
+            storage.setMyId(''); // Clear the saved ID
+            state.peer.destroy(); // Destroy the old peer
+            state.peer = new Peer(); // Create a new one
+            setupPeerListeners(); // Reattach listeners
+        } else {
+            // Don't use alert as it blocks UI on mobile aggressively, maybe just console or a toast in future,
+            // but for now we'll keep alert for critical ones except disconnected
+            if (err.type !== 'peer-unavailable') {
+                alert('PeerJS Error: ' + err.message);
+            } else {
+                ui.addSystemMessage('Peer is unavailable.');
+            }
+        }
     });
+}
+
+export function initPeer() {
+    const savedId = storage.getMyId();
+    state.peer = savedId ? new Peer(savedId) : new Peer();
+    setupPeerListeners();
 }
 
 export function connectToPeer(peerId) {
